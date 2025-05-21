@@ -23,8 +23,8 @@ _Linux/MacOS:_
 ```
 python3 -m venv nombre_venv
 source nombre_venv/bin/activate
-pip install -r /backend/requirements.txt
-python3 /backend/app.py
+pip install -r requirements.txt
+python3 app.py
 ```
 
 _Windows_
@@ -32,8 +32,8 @@ _Windows_
 ```
 python3 -m venv nombre_venv
 nombre venv\Scripts\activate.bat
-pip install -r \backend\requirements.txt
-python3 \backend\app.py
+pip install -r requirements.txt
+python3 app.py
 ```
 
 _Ya tendrias la herramienta corriendo en tu maquina local_
