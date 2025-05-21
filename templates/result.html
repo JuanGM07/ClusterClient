@@ -1,0 +1,100 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Segmentación</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #132554;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        .graph {
+            background-color: #1f355f;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .descriptions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #1e2f5a;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #89d0f0;
+        }
+
+        .btn-download {
+            display: inline-block;
+            margin: 30px auto 0;
+            padding: 12px 24px;
+            background-color: #89d0f0;
+            color: #132554;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+
+        .btn-download:hover {
+            background-color: #6eb8d6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Segmentación de Clientes</h1>
+
+        <div class="graph">
+            {{ graph_html | safe }}
+        </div>
+
+        <div class="descriptions">
+            {% for desc in descriptions %}
+            <div class="card">
+                <h3>Cluster {{ loop.index0 }}</h3>
+                <p>{{ desc }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="text-align:center;">
+            <a href="/download" class="btn-download">Descargar CSV Segmentado</a>
+        </div>
+    </div>
+</body>
+</html>

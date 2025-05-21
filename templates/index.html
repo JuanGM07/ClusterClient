@@ -1,0 +1,192 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ClusterClient</title>
+    <style>
+        body {
+            background-color: #132554;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .logo-img {
+            width: 800px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            position: relative; /* para el pseudo-elemento */
+            background-color: #1f355f;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            text-align: center;
+            /* borde discontinuo por defecto */
+            border: 3px dashed #89d0f0;
+            transition: border 0.3s ease;
+        }
+
+
+        #drop-area.drag-over {
+            background-color: #2a4376;
+        }
+
+        .upload-box input[type="file"] {
+            display: none;
+        }
+
+        .upload-label {
+            color: #89d0f0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Mensaje de éxito */
+        .success-message {
+            background-color: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Botón analizar */
+        #analyze-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background-color: #2e77f7;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(46, 119, 247, 0.6);
+            transition: background-color 0.3s ease;
+        }
+
+        #analyze-btn:hover {
+            background-color: #245ecf;
+        }
+
+        /* Spinner (hidden by default) */
+        .spinner {
+            display: none;
+            margin: 20px auto 0;
+        }
+
+        .spinner div {
+            width: 18px;
+            height: 18px;
+            background-color: #89d0f0;
+            border-radius: 100%;
+            display: inline-block;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .spinner div:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .spinner div:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <img class="logo-img" src="{{ url_for('static', filename='cover.png') }}" alt="ClusterClient logo" />
+    <h1>ClusterClient</h1>
+
+    <div class="upload-box">
+        <form id="upload-form" action="/" method="post" enctype="multipart/form-data">
+            <input type="file" id="file-input" name="file" />
+            <label for="file-input" id="drop-area" class="upload-label">
+                Haz clic o arrastra un CSV aquí
+            </label>
+        </form>
+
+        <div class="success-message" id="success-message">
+            Archivo cargado correctamente
+        </div>
+
+        <button id="analyze-btn">Analizar</button>
+
+        <div class="spinner" id="spinner">
+            <div></div><div></div><div></div>
+        </div>
+    </div>
+
+    <script>
+        const dropArea = document.getElementById("drop-area");
+        const fileInput = document.getElementById("file-input");
+        const uploadText = document.getElementById("upload-text");
+        const spinner = document.getElementById("spinner");
+        const uploadBox = dropArea; // Ya es upload-box
+
+        dropArea.addEventListener("click", () => fileInput.click());
+
+        // drag events
+        dropArea.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            uploadBox.classList.add("drag-over");
+        });
+
+        dropArea.addEventListener("dragleave", () => {
+            uploadBox.classList.remove("drag-over");
+        });
+
+        dropArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            uploadBox.classList.remove("drag-over");
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                document.getElementById("upload-form").submit();
+            }
+        });
+
+        // Mostrar spinner al enviar el formulario
+        document.getElementById("upload-form").addEventListener("submit", () => {
+            spinner.style.display = "block";
+            uploadText.style.display = "none";
+        });
+
+        // Cuando el archivo se ha cargado (puedes pasar variable desde backend para detectar)
+        function onFileLoaded() {
+            spinner.style.display = "none";
+            uploadText.style.display = "block";
+            uploadBox.classList.add("file-loaded"); // Oculta el borde discontinuo
+            // Aquí podrías mostrar el botón analizar, etc.
+        }
+
+    </script>
+</body>
+</html>
